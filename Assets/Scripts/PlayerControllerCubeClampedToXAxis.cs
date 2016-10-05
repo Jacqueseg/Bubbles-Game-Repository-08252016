@@ -40,6 +40,7 @@ public class PlayerControllerCubeClampedToXAxis: MonoBehaviour
 
 		if(rb.IsSleeping()){
 			rb.WakeUp();
+			//debug.Log(awake);
 		}
 
 		if(jumping == true){
