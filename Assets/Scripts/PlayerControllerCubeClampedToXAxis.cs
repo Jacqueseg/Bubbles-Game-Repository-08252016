@@ -23,6 +23,8 @@ public class PlayerControllerCubeClampedToXAxis: MonoBehaviour
 	public float torque;
 	public Rigidbody rb;
 
+	public int collectedJumpPowerUps;
+
 	//Commit002 test 10/05/2016
 	void Start()
 	{
@@ -46,8 +48,8 @@ public class PlayerControllerCubeClampedToXAxis: MonoBehaviour
 		if(jumping == true){
 			jumpTimer -= Time.deltaTime;
 
-			if (jumpTimer <= 0.0f)
-				jumping = false;
+			if (jumpTimer <= 0.0f)			//Can only jump when touching the ground. Input buffer to allow for jumping when touching the ground
+				jumping = false;			//The timer is how long you are holding the jump button down
 			
 		}
 
@@ -72,28 +74,7 @@ public class PlayerControllerCubeClampedToXAxis: MonoBehaviour
 
 	
 
-
-/*
-	//Jump Code with right amount of points
-		if(count == 1 && Input.GetKeyDown(KeyCode.Space)){
-			//rb.velocity.y = jumpHeight;
 			
-			
-			Vector3 temporaryVariable = rb.velocity;
-			temporaryVariable.y = jumpHeight;
-			rb.velocity = temporaryVariable;
-
-
-		//2 Second Stick To walls and Rock forward
-		else if(count >= 3 && Input.GetKeyDown(KeyCode.Space)){
-			//rb.velocity.y = jumpHeight;
-
-			Vector3 temporaryVariable = rb.velocity;
-			temporaryVariable.y = superJumpHeight;
-			rb.velocity = temporaryVariable;
-			
-		}
-*/				
 
 		//The player is unable to turn/rotate left and right
 		//while moving/rocking forward and back along the x-axis
@@ -131,7 +112,7 @@ public class PlayerControllerCubeClampedToXAxis: MonoBehaviour
 
 	}
 			
-
+	/*
 	void OnCollisionStay(Collision stay)
 	{
 		if (jumping == true){
@@ -142,6 +123,19 @@ public class PlayerControllerCubeClampedToXAxis: MonoBehaviour
 			//Debug.Log(jumping);
 
 	}
+	*/
+
+	void OnTriggerStay(Collider collide)
+	{
+		if (jumping == true){
+			PlayerJump();
+
+		}
+		jumpCount = 0;
+		//Debug.Log(jumping);
+
+
+	}
 
 
 	void PlayerJump()
@@ -150,7 +144,7 @@ public class PlayerControllerCubeClampedToXAxis: MonoBehaviour
 		//Jumping Code Works!
 
 			Vector3 temporaryVariable = rb.velocity;
-			temporaryVariable.y += jumpHeight;
+			temporaryVariable.y += GetJumpHeight();			//by placing GetJumpHeight, we are customizing jump height each time		
 			rb.velocity = temporaryVariable;
 			jumping = false;
 
@@ -158,11 +152,14 @@ public class PlayerControllerCubeClampedToXAxis: MonoBehaviour
 
 	void OnTriggerEnter(Collider other)
 	{
-		if (other.gameObject.tag == "PickUp") 
+		if (other.gameObject.tag == "PickUp_Jump") 		//PickUp_Jump, PickUp_Speed
 		{
 			other.gameObject.SetActive(false);
 			count = count + 1;
 			SetCountText();
+
+			//jumpHeight = jumpHeight + 6;
+			collectedJumpPowerUps++;
 		}
 	}
 
@@ -173,6 +170,16 @@ public class PlayerControllerCubeClampedToXAxis: MonoBehaviour
 		{
 			winText.text = "YOU WIN!";
 		}
+	}
+
+	float GetJumpHeight()
+	{
+
+		
+		//return jumpHeight + (collectedJumpPowerUps * 6);
+		return jumpHeight + ((int)(collectedJumpPowerUps/3) * 6);
+
+		Debug.Log(jumpHeight);
 	}
 }
 	

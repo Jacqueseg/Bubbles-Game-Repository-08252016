@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/RollACubeSceneL.unity
+- path: Assets/Scenes/RollACubeSceneO.unity
   isLoaded: 1
   isActive: 1
