@@ -6,6 +6,7 @@ TagManager:
   tags:
   - PickUp_Jump
   - PickUp_Speed
+  - Death
   layers:
   - Default
   - TransparentFX

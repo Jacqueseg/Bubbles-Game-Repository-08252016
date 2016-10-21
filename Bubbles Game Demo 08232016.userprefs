@@ -2,12 +2,15 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\PlayerControllerCubeClampedToXAxis.cs">
     <Files>
-      <File FileName="Assets\Scripts\PlayerControllerCubeClampedToXAxis.cs" Line="175" Column="23" />
+      <File FileName="Assets\Scripts\PlayerControllerCubeClampedToXAxis.cs" Line="47" Column="3" />
       <File FileName="Assets\Scripts\PlayerControllerSphere.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="C:\Users\Public\Documents\Unity Projects\Bubbles Game Demo 08232016\Assets\Scripts\PlayerControllerCubeClampedToXAxis.cs" line="250" column="1" />
+      <Breakpoint file="C:\Users\Public\Documents\Unity Projects\Bubbles Game Demo 08232016\Assets\Scripts\PlayerControllerCubeClampedToXAxis.cs" line="230" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

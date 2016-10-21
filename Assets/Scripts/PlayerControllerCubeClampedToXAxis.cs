@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PlayerControllerCubeClampedToXAxis: MonoBehaviour 
 {
@@ -10,6 +11,7 @@ public class PlayerControllerCubeClampedToXAxis: MonoBehaviour
 
 	public int jumpCount;
 	public int maxJumpCount = 1;
+	public float jumpIncrementVariable = 6.0f;
 
 	public float jumpHeight = 6.0f;
 	public float superJumpHeight = 18.0f;
@@ -24,6 +26,10 @@ public class PlayerControllerCubeClampedToXAxis: MonoBehaviour
 	public Rigidbody rb;
 
 	public int collectedJumpPowerUps;
+	public int collectedSpeedPowerUps;
+	public float maxAngularVelocity = 5.5f;
+	public float maxSpeedIncrement = 10.0f;
+	public float speedIncrementVariable = 10.0f;
 
 	//Commit002 test 10/05/2016
 	void Start()
@@ -33,12 +39,14 @@ public class PlayerControllerCubeClampedToXAxis: MonoBehaviour
 		winText.text = "";
 
 		rb = GetComponent<Rigidbody>();
-		rb.maxAngularVelocity = 5.5f;		//Whenever the player picks up collectibles, the maxAngularVelocity will be adjusted as a variable for each level/powerup
+		rb.maxAngularVelocity = GetmaxAngularVelocity();		//Whenever the player picks up collectibles, the maxAngularVelocity will be adjusted as a variable for each level/powerup
 
 	}
 
 	void FixedUpdate ()
 	{
+
+		rb.maxAngularVelocity = GetmaxAngularVelocity();
 
 		if(rb.IsSleeping()){
 			rb.WakeUp();
@@ -69,6 +77,9 @@ public class PlayerControllerCubeClampedToXAxis: MonoBehaviour
 				jumping = true;
 				jumpTimer = .3f;
 			}
+
+
+
 		}
 
 
@@ -80,8 +91,8 @@ public class PlayerControllerCubeClampedToXAxis: MonoBehaviour
 		//while moving/rocking forward and back along the x-axis
 
 			float rockForward = Input.GetAxis("Horizontal");
-			//rb.AddTorque(-transform.forward * torque * rockForward);
-			rb.AddTorque(-Vector3.forward * torque * rockForward);
+			//rb.AddTorque(-transform.forward * GetSpeed() * rockForward);
+			rb.AddTorque(-Vector3.forward * GetSpeed() * rockForward);
 			//print(rockForward);
 			//isMobile = true;
 
@@ -91,8 +102,8 @@ public class PlayerControllerCubeClampedToXAxis: MonoBehaviour
 		//while moving/rocking forward and back along the x-axis
 
 		float rockUpAndDown = Input.GetAxis("Vertical");
-		//rb.AddTorque(-transform.forward * torque * rockForward);
-		rb.AddTorque(Vector3.right * torque * rockUpAndDown);
+		//rb.AddTorque(-transform.forward * GetSpeed() * rockForward);
+		rb.AddTorque(Vector3.right * GetSpeed() * rockUpAndDown);
 		//print(rockForward);
 		//isMobile = true;
 
@@ -150,6 +161,9 @@ public class PlayerControllerCubeClampedToXAxis: MonoBehaviour
 
 	}
 
+
+
+
 	void OnTriggerEnter(Collider other)
 	{
 		if (other.gameObject.tag == "PickUp_Jump") 		//PickUp_Jump, PickUp_Speed
@@ -161,6 +175,29 @@ public class PlayerControllerCubeClampedToXAxis: MonoBehaviour
 			//jumpHeight = jumpHeight + 6;
 			collectedJumpPowerUps++;
 		}
+
+
+		else if (other.gameObject.tag == "PickUp_Speed") 		//PickUp_Jump, PickUp_Speed
+		{
+			other.gameObject.SetActive(false);
+			count = count + 1;
+			SetCountText();
+
+			//jumpHeight = jumpHeight + 6;
+			collectedSpeedPowerUps++;
+			rb.maxAngularVelocity = GetmaxAngularVelocity();		//Whenever the player picks up collectibles, the maxAngularVelocity will be adjusted as a variable for each level/powerup
+
+		}
+
+		else if (other.gameObject.tag =="Death")
+		{
+	
+			SceneManager.LoadScene("RollACubeSceneO");
+
+
+
+		}
+
 	}
 
 	void SetCountText()
@@ -172,15 +209,36 @@ public class PlayerControllerCubeClampedToXAxis: MonoBehaviour
 		}
 	}
 
+
+
+
+
 	float GetJumpHeight()
 	{
 
 		
 		//return jumpHeight + (collectedJumpPowerUps * 6);
-		return jumpHeight + ((int)(collectedJumpPowerUps/3) * 6);
+		return jumpHeight + ((int)(collectedJumpPowerUps/3) * jumpIncrementVariable);
 
 		Debug.Log(jumpHeight);
 	}
+
+
+	float GetSpeed()
+	{
+		return torque + ((int)(collectedSpeedPowerUps/5) * speedIncrementVariable);				//speed increase every 5 pickups, get 5 more units of torque
+
+
+	}
+
+
+	float GetmaxAngularVelocity()
+	{
+		return maxAngularVelocity + ((int)(collectedSpeedPowerUps/5) * maxSpeedIncrement);	
+
+
+	}
+
 }
 	
 
